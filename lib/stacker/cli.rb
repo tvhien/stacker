@@ -19,6 +19,9 @@ module Stacker
     method_option :allow_destructive, type: :boolean, default: false,
       banner: 'allow destructive updates'
 
+    method_option :force, type: :boolean, default: false,
+      banner: 'do not ask for permission'
+
     def initialize(*args); super(*args) end
 
     desc "init [PATH]", "Create stacker project directories"
@@ -62,29 +65,23 @@ module Stacker
 
     desc "update [STACK_NAME]", "Create or update stack"
     def update stack_name = nil
+      $stdout.write 'Using ansarada version'
+
       with_one_or_all(stack_name) do |stack|
         resolve stack
 
         if stack.exists?
           next unless full_diff stack
 
-          if yes? "Update remote template with these changes (y/n)?"
-            time = Benchmark.realtime do
-              stack.update allow_destructive: options['allow_destructive']
-            end
-            Stacker.logger.info formatted_time stack_name, 'updated', time
-          else
-            Stacker.logger.warn 'Update skipped'
+          time = Benchmark.realtime do
+            stack.update allow_destructive: options['allow_destructive']
           end
+          Stacker.logger.info formatted_time stack_name, 'updated', time
         else
-          if yes? "#{stack.name} does not exist. Create it (y/n)?"
-            time = Benchmark.realtime do
-              stack.create
-            end
-            Stacker.logger.info formatted_time stack_name, 'created', time
-          else
-            Stacker.logger.warn 'Create skipped'
+          time = Benchmark.realtime do
+            stack.create
           end
+          Stacker.logger.info formatted_time stack_name, 'created', time
         end
       end
     end
