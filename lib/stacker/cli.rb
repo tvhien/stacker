@@ -65,7 +65,6 @@ module Stacker
 
     desc "update [STACK_NAME]", "Create or update stack"
     def update stack_name = nil
-      $stdout.write 'Using ansarada version'
 
       with_one_or_all(stack_name) do |stack|
         resolve stack
