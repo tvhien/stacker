@@ -109,11 +109,15 @@ JSON
     end
 
     def update options = {}
+      Stacker.logger.info 'Asserting valid keys'
       options.assert_valid_keys(:blocking, :allow_destructive)
 
+      Stacker.logger.info 'Fetching blocking options'
       blocking = options.fetch(:blocking, true)
+      Stacker.logger.info 'Fetching allow destructive options'
       allow_destructive = options.fetch(:allow_destructive, false)
 
+      Stacker.logger.info 'Checking for missing options'
       if parameters.missing.any?
         raise MissingParameters.new(
           "Required parameters missing: #{parameters.missing.join ', '}"
@@ -128,12 +132,16 @@ JSON
         capabilities: capabilities.local
       }
 
+      Stacker.logger.info 'Checking to see if allow destructive enabled'
       unless allow_destructive
+        Stacker.logger.info 'Setting update parameters'
         update_params[:stack_policy_during_update_body] = SAFE_UPDATE_POLICY
       end
 
+      Stacker.logger.info 'Caling client update'
       client.update(update_params)
 
+      Stacker.logger.info 'Entering wait loop'
       wait_while_status 'UPDATE_IN_PROGRESS' if blocking
     rescue AWS::CloudFormation::Errors::ValidationError => err
       case err.message
