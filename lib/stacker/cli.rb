@@ -65,11 +65,14 @@ module Stacker
 
     desc "update [STACK_NAME]", "Create or update stack"
     def update stack_name = nil
-
+      Stacker.logger.warn 'Starting update in cli'
       with_one_or_all(stack_name) do |stack|
+        Stacker.logger.warn 'Resolving stack'
         resolve stack
 
+        Stacker.logger.warn 'Checking to see if stack exists'
         if stack.exists?
+          Stacker.logger.warn 'Skipping unless full diff'
           next unless full_diff stack
 
           time = Benchmark.realtime do
@@ -147,9 +150,12 @@ YAML
     end
 
     def full_diff stack
+      Stacker.logger.warn 'Starting full_diff cli'
       templ_diff = stack.template.diff :color
+      Stacker.logger.warn 'Checking for parameter diff'
       param_diff = stack.parameters.diff :color
 
+      Stacker.logger.warn 'Checking to see if diff exists'
       if (templ_diff + param_diff).length == 0
         Stacker.logger.warn 'Stack up-to-date'
         return false
@@ -184,6 +190,7 @@ YAML
     end
 
     def resolve stack
+      Stacker.logger.warn 'Starting resolve cli'
       return {} if stack.parameters.resolver.dependencies.none?
       Stacker.logger.debug 'Resolving dependencies...'
       stack.parameters.resolved
