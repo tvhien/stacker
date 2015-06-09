@@ -138,7 +138,7 @@ JSON
         update_params[:stack_policy_during_update_body] = SAFE_UPDATE_POLICY
       end
 
-      Stacker.logger.warn 'Caling client update'
+      Stacker.logger.warn 'Calling client update'
       client.update(update_params)
 
       Stacker.logger.warn 'Entering wait loop'
