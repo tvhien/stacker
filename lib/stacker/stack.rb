@@ -144,6 +144,8 @@ JSON
       Stacker.logger.warn 'Entering wait loop'
       wait_while_status 'UPDATE_IN_PROGRESS' if blocking
     rescue AWS::CloudFormation::Errors::ValidationError => err
+      Stacker.logger.warn "Error received #{err.message}"
+
       case err.message
       when /does not exist/
         raise DoesNotExistError.new err.message
