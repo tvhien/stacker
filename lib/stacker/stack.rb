@@ -109,6 +109,7 @@ JSON
     end
 
     def update options = {}
+      Stacker.logger.warn "Ruby version #{VERSION}"
       Stacker.logger.warn 'Asserting valid keys'
       options.assert_valid_keys(:blocking, :allow_destructive)
 
