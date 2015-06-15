@@ -166,7 +166,7 @@ JSON
         failure_event = client.events.enum(limit: 30).find do |event|
           event.resource_status =~ /_FAILED$/
         end
-        failure_reason = failure_event.nil ? "Unknown failure reason" : failure_event.resource_status_reason
+        failure_reason = failure_event.nil? ? "Unknown failure reason" : failure_event.resource_status_reason
         if failure_reason =~ /stack policy/
           raise StackPolicyError.new failure_reason
         else
