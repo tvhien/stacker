@@ -17,30 +17,23 @@ module Stacker
       end
 
       def local
-        Stacker.logger.warn 'Getting local'
         @local ||= begin
           if exists?
-            Stacker.logger.warn 'Reading and parsing local file'
             template = JSON.parse File.read path
-            Stacker.logger.warn 'Setting format version'
             template['AWSTemplateFormatVersion'] ||= FORMAT_VERSION
             template
           else
-            Stacker.logger.warn 'Local does not exist'
             {}
           end
         end
       end
 
       def remote
-        Stacker.logger.warn 'Getting remote'
         @remote ||= JSON.parse client.template
       rescue AWS::CloudFormation::Errors::ValidationError => err
         if err.message =~ /does not exist/
-          Stacker.logger.warn 'Raising DoesNotExistError'
           raise DoesNotExistError.new err.message
         else
-          Stacker.logger.warn 'Raising Error'
           raise Error.new err.message
         end
       end

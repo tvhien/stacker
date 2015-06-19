@@ -109,25 +109,18 @@ JSON
     end
 
     def update options = {}
-      Stacker.logger.warn "Ruby version #{VERSION}"
-      Stacker.logger.warn "Ruby platform #{RUBY_PLATFORM}"
-      Stacker.logger.warn "Ruby engine #{RUBY_ENGINE}"
-      Stacker.logger.warn 'Asserting valid keys'
       options.assert_valid_keys(:blocking, :allow_destructive)
 
-      Stacker.logger.warn 'Fetching blocking options'
       blocking = options.fetch(:blocking, true)
-      Stacker.logger.warn 'Fetching allow destructive options'
       allow_destructive = options.fetch(:allow_destructive, false)
 
-      Stacker.logger.warn 'Checking for missing options'
       if parameters.missing.any?
         raise MissingParameters.new(
           "Required parameters missing: #{parameters.missing.join ', '}"
         )
       end
 
-      Stacker.logger.warn 'Updating stack'
+      Stacker.logger.info 'Updating stack'
 
       update_params = {
         template: template.local,
@@ -135,20 +128,14 @@ JSON
         capabilities: capabilities.local
       }
 
-      Stacker.logger.warn 'Checking to see if allow destructive enabled'
       unless allow_destructive
-        Stacker.logger.warn 'Setting update parameters'
         update_params[:stack_policy_during_update_body] = SAFE_UPDATE_POLICY
       end
 
-      Stacker.logger.warn 'Calling client update'
       client.update(update_params)
 
-      Stacker.logger.warn 'Entering wait loop'
       wait_while_status 'UPDATE_IN_PROGRESS' if blocking
     rescue AWS::CloudFormation::Errors::ValidationError => err
-      Stacker.logger.warn "Error received #{err.message}"
-
       case err.message
       when /does not exist/
         raise DoesNotExistError.new err.message
