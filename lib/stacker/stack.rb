@@ -54,7 +54,7 @@ JSON
 
     def client
       @client ||= region.client.stacks[name]
-      # Stacker.logger.debug 'Stack config max_retries: #{@client.config.max_retries}'
+      Stacker.logger.debug 'Stack config max_retries: Blah'
     end
 
     delegate *CLIENT_METHODS, to: :client
