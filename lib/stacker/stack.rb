@@ -6,6 +6,7 @@ require 'memoist'
 require 'stacker/stack/capabilities'
 require 'stacker/stack/parameters'
 require 'stacker/stack/template'
+require 'logger'
 
 module Stacker
   class Stack
@@ -50,6 +51,7 @@ JSON
 
     def initialize region, name, options = {}
       @region, @name, @options = region, name, options
+      AWS.config(:logger => Logger.new($stdout))
     end
 
     def client
