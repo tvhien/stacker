@@ -51,6 +51,7 @@ JSON
 
     def initialize region, name, options = {}
       @region, @name, @options = region, name, options
+      AWS.config(:logger => Logger.new($stdout))
     end
 
     def client
