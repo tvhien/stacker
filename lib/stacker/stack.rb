@@ -6,6 +6,7 @@ require 'memoist'
 require 'stacker/stack/capabilities'
 require 'stacker/stack/parameters'
 require 'stacker/stack/template'
+require 'logger'
 
 module Stacker
   class Stack
@@ -54,6 +55,7 @@ JSON
 
     def client
       @client ||= region.client.stacks[name]
+      @client.config.max_retries(:logger => Logger.new($stdout))
       # Stacker.logger.debug 'Stack config max_retries: Blah'
     end
 
