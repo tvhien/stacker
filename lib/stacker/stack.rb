@@ -6,7 +6,6 @@ require 'memoist'
 require 'stacker/stack/capabilities'
 require 'stacker/stack/parameters'
 require 'stacker/stack/template'
-require 'logger'
 
 module Stacker
   class Stack
@@ -51,11 +50,11 @@ JSON
 
     def initialize region, name, options = {}
       @region, @name, @options = region, name, options
-      AWS.config(:logger => Logger.new($stdout))
     end
 
     def client
       @client ||= region.client.stacks[name]
+      Stacker.logger.debug 'Stack config max_retries: #{@client.config.max_retries}'
     end
 
     delegate *CLIENT_METHODS, to: :client
