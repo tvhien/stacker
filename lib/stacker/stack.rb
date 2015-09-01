@@ -55,7 +55,7 @@ JSON
 
     def client
       @client ||= region.client.stacks[name]
-      AWS.config.max_retries(:logger => Logger.new($stdout))
+      AWS.config(:logger => Logger.new($stdout))
       # Stacker.logger.debug 'Stack config max_retries: Blah'
     end
 
