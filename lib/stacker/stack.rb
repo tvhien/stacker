@@ -51,13 +51,10 @@ JSON
 
     def initialize region, name, options = {}
       @region, @name, @options = region, name, options
-      AWS.config(:logger => Logger.new($stdout))
     end
 
     def client
       @client ||= region.client.stacks[name]
-      # AWS.config(:logger => Logger.new($stdout))
-      # Stacker.logger.debug 'Stack config max_retries: Blah'
     end
 
     delegate *CLIENT_METHODS, to: :client
