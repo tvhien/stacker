@@ -104,6 +104,8 @@ JSON
         capabilities: capabilities.local
       )
 
+      sleep 90
+
       wait_while_status 'CREATE_IN_PROGRESS' if blocking
     rescue AWS::CloudFormation::Errors::ValidationError => err
       raise Error.new err.message
