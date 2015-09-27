@@ -137,6 +137,8 @@ JSON
 
       client.update(update_params)
 
+      sleep 30
+
       wait_while_status 'UPDATE_IN_PROGRESS' if blocking
     rescue AWS::CloudFormation::Errors::ValidationError => err
       case err.message
