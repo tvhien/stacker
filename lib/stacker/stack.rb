@@ -172,7 +172,7 @@ JSON
     def wait_while_status wait_status
       while flush_cache(:status) && status == wait_status
         report_status
-        sleep 5
+        sleep 15
       end
       report_status
     end
