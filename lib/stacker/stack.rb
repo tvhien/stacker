@@ -101,7 +101,8 @@ JSON
         name,
         template.local,
         parameters: parameters.resolved,
-        capabilities: capabilities.local
+        capabilities: capabilities.local,
+        disable_rollback: true
       )
 
       sleep 90
