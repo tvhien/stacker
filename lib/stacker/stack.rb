@@ -158,7 +158,7 @@ JSON
       case status
       when /_COMPLETE$/
         Stacker.logger.info "#{name} Status => #{status}"
-      when /ROLLBACK_IN_PROGRESS$/
+      when /ROLLBACK_IN_PROGRESS$/, /_FAILED$/
         failure_event = client.events.enum(limit: 30).find do |event|
           event.resource_status =~ /_FAILED$/
         end
