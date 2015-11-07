@@ -52,7 +52,7 @@ module Stacker
       @logger ||= begin
         logger = Logger.new STDOUT
         logger.level = Logger::DEBUG
-        logger.formatter = proc { |_, _, _, msg| "#{Time.new}: #{msg}\n" }
+        logger.formatter = proc { |_, _, _, msg| "#{msg}\n" }
         PrettyLogger.new logger
       end
     end
