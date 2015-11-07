@@ -101,7 +101,8 @@ JSON
         name,
         template.local,
         parameters: parameters.resolved,
-        capabilities: capabilities.local
+        capabilities: capabilities.local,
+        disable_rollback: true
       )
 
       sleep 90
@@ -157,11 +158,11 @@ JSON
       case status
       when /_COMPLETE$/
         Stacker.logger.info "#{name} Status => #{status}"
-      when /ROLLBACK_IN_PROGRESS$/
+      when /ROLLBACK_IN_PROGRESS$/, /_FAILED$/
         failure_event = client.events.enum(limit: 30).find do |event|
           event.resource_status =~ /_FAILED$/
         end
-        failure_reason = failure_event.resource_status_reason
+        failure_reason = failure_event.nil? ? "Unknown failure reason" : failure_event.resource_status_reason
         if failure_reason =~ /stack policy/
           raise StackPolicyError.new failure_reason
         else

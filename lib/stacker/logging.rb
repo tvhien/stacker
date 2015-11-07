@@ -50,6 +50,7 @@ module Stacker
 
     def logger
       @logger ||= begin
+        STDOUT.sync = true
         logger = Logger.new STDOUT
         logger.level = Logger::DEBUG
         logger.formatter = proc { |_, _, _, msg| "#{msg}\n" }
