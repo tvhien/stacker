@@ -29,7 +29,7 @@ module Stacker
 	  return @client
     end
 
-    def stack name
+    def GetStack name
       stacks.find { |s| s.name == name } || Stack.new(self, name)
     end
 

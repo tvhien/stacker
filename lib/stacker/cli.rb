@@ -226,7 +226,7 @@ YAML
       end
 
       if stack_name
-        yield_with_stack.call region.stack(stack_name)
+        yield_with_stack.call region.GetStack(stack_name)
       else
 	    Stacker.logger.info "with_one_or_all else statement"
         region.stacks.each(&yield_with_stack)
