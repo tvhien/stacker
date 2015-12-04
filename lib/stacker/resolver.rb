@@ -20,7 +20,7 @@ module Stacker
 	  puts "parameters are #{parameters}"
       @resolved ||= Hash[parameters.map do |name, value|
         if value.is_a? Hash
-          stack = region.stack value.fetch('Stack')
+          stack = region.GetStack value.fetch('Stack')
           value = stack.outputs.fetch value.fetch('Output')
         end
 		retval = [ name, value ]
