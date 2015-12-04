@@ -66,25 +66,25 @@ module Stacker
 
     desc "update [STACK_NAME]", "Create or update stack"
     def update stack_name = nil	
-	  Stacker.logger.info "[INFO] update method called in cli.rb for stack #{stack_name}"
+  	  Stacker.logger.info "[INFO] update method called in cli.rb for stack #{stack_name}"
       with_one_or_all(stack_name) do |stack|	    
 
-		resolve stack		
-		Stacker.logger.info "[INFO] resolve check completed in stack update"
-        #if stack.exists?
-		begin
-		a = stack.region.client.describe_stacks stack_name: stack.name
-		rescue Aws::CloudFormation::Errors::ValidationError => err
-			if err.message =~ /does not exist/
-				Stacker.logger.info "[info] stack does not exist"
-				time = Benchmark.realtime do
-					stack.create
-				end
-				Stacker.logger.info formatted_time stack_name, 'created', time
-				next
-			else
-			  raise Error.new err.message
-			end
+  		resolve stack		
+  		Stacker.logger.info "[INFO] resolve check completed in stack update"
+      #if stack.exists?
+  		begin
+  		a = stack.region.client.describe_stacks stack_name: stack.name
+  		rescue Aws::CloudFormation::Errors::ValidationError => err
+  			if err.message =~ /does not exist/
+  				Stacker.logger.info "[info] stack does not exist"
+  				time = Benchmark.realtime do
+  					stack.create
+  				end
+  				Stacker.logger.info formatted_time stack_name, 'created', time
+  				next
+  			else
+  			  raise Error.new err.message
+  			end
 		end
 		 		 
 		if (true)
