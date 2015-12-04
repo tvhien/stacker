@@ -217,8 +217,7 @@ YAML
     end
 
     def with_one_or_all stack_name = nil, &block
-	  
-	  Stacker.logger.debug 'with_one_or_all called'
+  	  Stacker.logger.debug 'with_one_or_all called'
       yield_with_stack = proc do |stack|
         Stacker.logger.info "with_one_or_all running for each stack #{stack.name}:"
         yield stack
@@ -228,21 +227,21 @@ YAML
       if stack_name
         yield_with_stack.call region.GetStack(stack_name)
       else
-	    Stacker.logger.info "with_one_or_all else statement"
+        Stacker.logger.info "with_one_or_all else statement"
         region.stacks.each(&yield_with_stack)
       end
 
-    rescue Stacker::Stack::StackPolicyError => err
-      if options['allow_destructive']
+      rescue Stacker::Stack::StackPolicyError => err
+        if options['allow_destructive']
+          Stacker.logger.fatal err.message
+        else
+          Stacker.logger.fatal 'Stack update policy prevents replacing or destroying resources.'
+          Stacker.logger.warn 'Try running again with \'--allow-destructive\''
+        end
+        exit 1
+      rescue Stacker::Stack::Error => err
         Stacker.logger.fatal err.message
-      else
-        Stacker.logger.fatal 'Stack update policy prevents replacing or destroying resources.'
-        Stacker.logger.warn 'Try running again with \'--allow-destructive\''
-      end
-      exit 1
-    rescue Stacker::Stack::Error => err
-      Stacker.logger.fatal err.message
-      exit 1
+        exit 1
     end
 
     def templates_path
