@@ -37,7 +37,7 @@ module Stacker
 
     desc "show STACK_NAME", "Show details of a stack"
     def show stack_name
-      with_one_or_all stack_name do |stack|
+      (with_one_or_all (stack_name)).each do |stack|
         Stacker.logger.inspect(
           'Description'  => stack.description,
           'Status'       => stack.stack_status,
@@ -51,14 +51,14 @@ module Stacker
 
     desc "status [STACK_NAME]", "Show stack status"
     def status stack_name = nil
-      with_one_or_all(stack_name) do |stack|
+      (with_one_or_all(stack_name)).each do |stack|
         Stacker.logger.debug stack.stack_status.indent
       end
     end
 
     desc "diff [STACK_NAME]", "Show outstanding stack differences"
     def diff stack_name = nil
-      with_one_or_all(stack_name) do |stack|
+      (with_one_or_all(stack_name)).each do |stack|
         resolve stack
         next unless full_diff stack
       end
@@ -67,7 +67,7 @@ module Stacker
     desc "update [STACK_NAME]", "Create or update stack"
     def update stack_name = nil	
   	  Stacker.logger.info "[INFO] update method called in cli.rb for stack #{stack_name}"
-      with_one_or_all(stack_name) do |stack|	    
+      (with_one_or_all(stack_name)).each do |stack|	    
 
   		resolve stack		
   		Stacker.logger.info "[INFO] resolve check completed in stack update"
@@ -107,7 +107,7 @@ module Stacker
 
     desc "dump [STACK_NAME]", "Download stack template"
     def dump stack_name = nil
-      with_one_or_all(stack_name) do |stack|
+      (with_one_or_all(stack_name)).each do |stack|
 		begin
 		
 			a = stack.region.client.describe_stacks stack_name: stack.name
@@ -133,7 +133,7 @@ module Stacker
 
     desc "fmt [STACK_NAME]", "Re-format template JSON"
     def fmt stack_name = nil
-      with_one_or_all(stack_name) do |stack|
+      (with_one_or_all(stack_name)).each do |stack|
         if stack.template.exists?
           Stacker.logger.warn 'Formatting...'
           stack.template.write
@@ -218,18 +218,22 @@ YAML
 
     def with_one_or_all stack_name = nil, &block
   	  Stacker.logger.debug 'with_one_or_all called'
-      yield_with_stack = proc do |stack|
-        Stacker.logger.info "with_one_or_all running for each stack #{stack.name}:"
-        yield stack
-        Stacker.logger.info ''
-      end
+      # yield_with_stack = proc do |stack|
+      #   Stacker.logger.info "with_one_or_all running for each stack #{stack.name}:"
+      #   yield stack
+      #   Stacker.logger.info ''
+      # end
+
+      stacks = Array.new
 
       if stack_name
-        yield_with_stack.call region.GetStack(stack_name)
+        stacks.push(region.GetStack(stack_name))
       else
         Stacker.logger.info "with_one_or_all else statement"
-        region.stacks.each(&yield_with_stack)
+        stacks = region.stacks
       end
+
+      return stacks
 
       rescue Stacker::Stack::StackPolicyError => err
         if options['allow_destructive']
