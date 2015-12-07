@@ -24,7 +24,7 @@ module Stacker
     def client  
 	  Aws.config[:ssl_verify_peer] = false
 	  Stacker.logger.debug 'SSL verification turned off'
-      @client ||= Aws::CloudFormation::Client.new region: name
+      @client ||= Aws::CloudFormation::Client.new region: name, retry_limit: 6
 	  Stacker.logger.debug 'client object is created in region.rb'
 	  return @client
     end
