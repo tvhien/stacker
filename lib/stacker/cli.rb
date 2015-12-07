@@ -67,7 +67,7 @@ module Stacker
     desc "update [STACK_NAME]", "Create or update stack"
     def update stack_name = nil	
       (with_one_or_all(stack_name)).each do |stack|	    
-
+      Stacker.logger.info "Attempting to update #{stack_name}"  
   		resolve stack		
       #if stack.exists?
   		begin
@@ -215,7 +215,6 @@ YAML
     end
 
     def with_one_or_all stack_name = nil, &block
-  	  Stacker.logger.debug 'with_one_or_all called'
       # yield_with_stack = proc do |stack|
       #   Stacker.logger.info "with_one_or_all running for each stack #{stack.name}:"
       #   yield stack
@@ -227,7 +226,6 @@ YAML
       if stack_name
         stacks.push(region.GetStack(stack_name))
       else
-        Stacker.logger.info "with_one_or_all else statement"
         stacks = region.stacks
       end
 

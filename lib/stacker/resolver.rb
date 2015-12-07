@@ -22,7 +22,8 @@ module Stacker
         value = stack.outputs.fetch value.fetch('Output')
       end
 		  retval = [ name, value ]
-		  puts "Resolver.resolved finishing with #{retval}"
+      #the following logging message will be reformatted in the future with more elaborate detail
+		  #puts "Resolver.resolved finishing with #{retval}"
         [ name, value ]
       end]
     end
