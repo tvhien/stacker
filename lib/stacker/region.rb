@@ -7,7 +7,7 @@ module Stacker
     attr_reader :name, :defaults, :stacks, :templates_path
 
     def initialize(name, defaults, stacks, templates_path)
-	  Stacker.logger.info "[INFO] region name is: #{name}"	
+	    Stacker.logger.info "region name is: #{name}"	
       @name = name
       @defaults = defaults
       @stacks = stacks.map do |options|

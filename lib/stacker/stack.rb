@@ -167,7 +167,6 @@ JSON
     private
 
     def report_status
-	  Stacker.logger.info "[INFO] report_status called"	
       case stack_status
       when /_COMPLETE$/
         Stacker.logger.info "#{name} Status => #{stack_status}"
