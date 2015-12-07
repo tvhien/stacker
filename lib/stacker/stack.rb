@@ -54,10 +54,7 @@ JSON
     end
 
     def client
-	  Stacker.logger.info "[INFO] stack name is: #{name}"	
 	  @client = (region.client.describe_stacks stack_name: name)[0]
-
-	  Stacker.logger.info "[INFO] stack name is passed successfully: #{name}"
 	  return @client[0]
     end
 
@@ -80,13 +77,13 @@ JSON
       @capabilities ||= Capabilities.new self
     end
 
-    def outputs
-	  puts "output method called"  
+    def outputs  
 	  @outputs = Hash[client.outputs.map { |output| [ output.output_key, output.output_value ] }]  
 	  return @outputs
+      # leaving the following code block commented out for future improvements.
       #@outputs ||= begin
       #  return {} unless complete?
-	  #	puts "calling hash"
+	    #	puts "calling hash"
       #  Hash[client.outputs.map { |output| [ output.output_key, output.output_value ] }]
       #end
     end
