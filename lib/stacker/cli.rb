@@ -67,40 +67,50 @@ module Stacker
     desc "update [STACK_NAME]", "Create or update stack"
     def update stack_name = nil	
       (with_one_or_all(stack_name)).each do |stack|	    
-      Stacker.logger.info "Attempting to update #{stack.name}"  
-  		resolve stack		
-      #if stack.exists?
-  		begin
-  		a = stack.region.client.describe_stacks stack_name: stack.name
-  		rescue Aws::CloudFormation::Errors::ValidationError => err
-  			if err.message =~ /does not exist/
-  				Stacker.logger.info "stack #{stack.name} does not exist in AWS. Stacker will attempt to create this stack"
-  				time = Benchmark.realtime do
-  					stack.create
-  				end
-  				Stacker.logger.info formatted_time stack_name, 'created', time
-  				next
-  			else
-  			  raise Error.new err.message
-  			end
-		end
-		 		 
-		if (true)
-			Stacker.logger.info "stack #{stack.name} exist in AWS"
-			next unless full_diff stack
+        Stacker.logger.info "Attempting to update #{stack.name}"  
+    		resolve stack		
+        #if stack.exists?
+    		begin
+      		a = stack.region.client.describe_stacks stack_name: stack.name
+      		rescue Aws::CloudFormation::Errors::ValidationError => err
+      			if err.message =~ /does not exist/
+      				Stacker.logger.info "stack #{stack.name} does not exist in AWS. Stacker will attempt to create this stack"
+      				time = Benchmark.realtime do
+      					stack.create
+      				end
+      				Stacker.logger.info formatted_time stack_name, 'created', time
+      				next
+      			else
+      			  raise Error.new err.message
+      			end
+    		end
+    		
+        Stacker.logger.info "stack #{stack.name} exist in AWS"
+        next unless full_diff stack
 
-			time = Benchmark.realtime do
-			stack.update allow_destructive: options['allow_destructive']
-			end
-			Stacker.logger.info formatted_time stack_name, 'updated', time
-		else
-			Stacker.logger.info "stack #{stack.name} does not exist in AWS. Stacker will attempt to create this stack"
-			time = Benchmark.realtime do
-			stack.create
-			end
-			Stacker.logger.info formatted_time stack_name, 'created', time
-		end
-		end
+        time = Benchmark.realtime do
+          stack.update allow_destructive: options['allow_destructive']
+        end
+        Stacker.logger.info formatted_time stack_name, 'updated', time
+
+        # the following block of code will be used to refactor this method. that will be done in the next PR  		 
+    		# if (true)
+    		# 	Stacker.logger.info "stack #{stack.name} exist in AWS"
+    		# 	next unless full_diff stack
+
+    		# 	time = Benchmark.realtime do
+    		# 	stack.update allow_destructive: options['allow_destructive']
+    		# 	end
+    		# 	Stacker.logger.info formatted_time stack_name, 'updated', time
+    		# else
+    		# 	Stacker.logger.info "stack #{stack.name} does not exist in AWS. Stacker will attempt to create this stack"
+    		# 	time = Benchmark.realtime do
+    		# 	stack.create
+    		# 	end
+    		# 	Stacker.logger.info formatted_time stack_name, 'created', time
+    		# end
+
+		  end
     end
 
     desc "dump [STACK_NAME]", "Download stack template"
