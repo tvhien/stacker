@@ -67,14 +67,14 @@ module Stacker
     desc "update [STACK_NAME]", "Create or update stack"
     def update stack_name = nil	
       (with_one_or_all(stack_name)).each do |stack|	    
-      Stacker.logger.info "Attempting to update #{stack_name}"  
+      Stacker.logger.info "Attempting to update #{stack.name}"  
   		resolve stack		
       #if stack.exists?
   		begin
   		a = stack.region.client.describe_stacks stack_name: stack.name
   		rescue Aws::CloudFormation::Errors::ValidationError => err
   			if err.message =~ /does not exist/
-  				Stacker.logger.info "stack #{stack_name} does not exist in AWS. Stacker will attempt to create this stack"
+  				Stacker.logger.info "stack #{stack.name} does not exist in AWS. Stacker will attempt to create this stack"
   				time = Benchmark.realtime do
   					stack.create
   				end
@@ -86,7 +86,7 @@ module Stacker
 		end
 		 		 
 		if (true)
-			Stacker.logger.info "stack #{stack_name} exist in AWS"
+			Stacker.logger.info "stack #{stack.name} exist in AWS"
 			next unless full_diff stack
 
 			time = Benchmark.realtime do
@@ -94,7 +94,7 @@ module Stacker
 			end
 			Stacker.logger.info formatted_time stack_name, 'updated', time
 		else
-			Stacker.logger.info "stack #{stack_name} does not exist in AWS. Stacker will attempt to create this stack"
+			Stacker.logger.info "stack #{stack.name} does not exist in AWS. Stacker will attempt to create this stack"
 			time = Benchmark.realtime do
 			stack.create
 			end
