@@ -113,8 +113,6 @@ JSON
         disable_rollback: true
       )
 
-      sleep 90
-
       wait_while_status 'CREATE_IN_PROGRESS' if blocking
     rescue Aws::CloudFormation::Errors::ValidationError => err
       raise Error.new err.message
@@ -149,8 +147,6 @@ JSON
       end
 
 	  region.client.update_stack(update_params)
-
-      sleep 30
 
       wait_while_status 'UPDATE_IN_PROGRESS' if blocking
     rescue Aws::CloudFormation::Errors::ValidationError => err
