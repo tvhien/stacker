@@ -113,8 +113,6 @@ JSON
         disable_rollback: true
       )
 
-      sleep 90
-
       wait_while_status 'CREATE_IN_PROGRESS' if blocking
     rescue Aws::CloudFormation::Errors::ValidationError => err
       raise Error.new err.message
@@ -149,8 +147,6 @@ JSON
       end
 
 	  region.client.update_stack(update_params)
-
-      sleep 30
 
       wait_while_status 'UPDATE_IN_PROGRESS' if blocking
     rescue Aws::CloudFormation::Errors::ValidationError => err
@@ -189,7 +185,7 @@ JSON
     def wait_while_status wait_status 
       while flush_cache(:stack_status) && ((region.client.describe_stacks stack_name: name)[0])[0].stack_status == wait_status
 		report_status
-        sleep 15
+        sleep 5
       end
       report_status
     end
