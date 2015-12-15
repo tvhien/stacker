@@ -7,24 +7,24 @@ module Stacker
     attr_reader :name, :defaults, :stacks, :templates_path
 
     def initialize(name, defaults, stacks, templates_path)
-	    Stacker.logger.info "region name is: #{name}"	
+      Stacker.logger.info "region name is: #{name}"
       @name = name
       @defaults = defaults
       @stacks = stacks.map do |options|
         begin
           Stack.new self, options.fetch('name'), options
         rescue KeyError => err
-         Stacker.logger.fatal "Malformed YAML: #{err.message}"
-         exit 1
+          Stacker.logger.fatal "Malformed YAML: #{err.message}"
+          exit 1
         end
       end
       @templates_path = templates_path
     end
 
-    def client  
-	  Aws.config[:ssl_verify_peer] = false
-    @client ||= Aws::CloudFormation::Client.new region: name, retry_limit: 6
-	  return @client
+    def client
+      Aws.use_bundled_cert!
+      @client ||= Aws::CloudFormation::Client.new region: name, retry_limit: 6
+      return @client
     end
 
     def GetStack name
