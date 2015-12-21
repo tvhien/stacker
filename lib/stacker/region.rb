@@ -23,7 +23,7 @@ module Stacker
 
     def client
       Aws.use_bundled_cert!
-      @client ||= Aws::CloudFormation::Client.new region: name, retry_limit: 6
+      @client ||= Aws::CloudFormation::Client.new region: name, retry_limit: 10
       return @client
     end
 
