@@ -154,7 +154,7 @@ JSON
       when /does not exist/
         raise DoesNotExistError.new err.message
       when /No updates/
-        raise UpToDateError.new err.message
+        Stacker.logger.info 'No real update took place. In order to apply these updates some existing resoources need to be updated'
       else
         raise Error.new err.message
       end
