@@ -3,6 +3,7 @@ require 'json'
 require 'memoist'
 require 'stacker/differ'
 require 'stacker/stack/component'
+require 'pry'
 
 module Stacker
   class Stack
@@ -29,13 +30,7 @@ module Stacker
       end
 	  
 	  def localStr
-        @localstr ||= begin
-          if exists?
-            templatestr = File.read path
-          else
-            {}
-          end
-        end
+        JSONFormatter.format(local)
       end
 
       def remote
