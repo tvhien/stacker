@@ -3,7 +3,6 @@ require 'json'
 require 'memoist'
 require 'stacker/differ'
 require 'stacker/stack/component'
-require 'pry'
 
 module Stacker
   class Stack
