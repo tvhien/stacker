@@ -24,28 +24,28 @@ module Stacker
       description
       exists?
       last_updated_time   
-    stack_status  
+	  stack_status	
       status_reason
     ]
 
     SAFE_UPDATE_POLICY = <<-JSON
+{
+  "Statement" : [
     {
-      "Statement" : [
-        {
-          "Effect" : "Deny",
-          "Action" : ["Update:Replace", "Update:Delete"],
-          "Principal" : "*",
-          "Resource" : "*"
-        },
-        {
-          "Effect" : "Allow",
-          "Action" : "Update:*",
-          "Principal" : "*",
-          "Resource" : "*"
-        }
-      ]
+      "Effect" : "Deny",
+      "Action" : ["Update:Replace", "Update:Delete"],
+      "Principal" : "*",
+      "Resource" : "*"
+    },
+    {
+      "Effect" : "Allow",
+      "Action" : "Update:*",
+      "Principal" : "*",
+      "Resource" : "*"
     }
-    JSON
+  ]
+}
+JSON
 
     attr_reader :region, :name, :options
 
@@ -54,8 +54,8 @@ module Stacker
     end
 
     def client
-      @client = (region.client.describe_stacks stack_name: name)[0]
-      return @client[0]
+	  @client = (region.client.describe_stacks stack_name: name)[0]
+	  return @client[0]
     end
 
     delegate *CLIENT_METHODS, to: :client
@@ -77,21 +77,21 @@ module Stacker
       @capabilities ||= Capabilities.new self
     end
 
-    def outputs
-      @outputs = Hash[client.outputs.map { |output| [ output.output_key, output.output_value ] }]
-      return @outputs
+    def outputs  
+	  @outputs = Hash[client.outputs.map { |output| [ output.output_key, output.output_value ] }]  
+	  return @outputs
       # leaving the following code block commented out for future improvements.
       #@outputs ||= begin
       #  return {} unless complete?
-      # puts "calling hash"
+	    #	puts "calling hash"
       #  Hash[client.outputs.map { |output| [ output.output_key, output.output_value ] }]
       #end
     end
 
     def create blocking = true
       # if exists?
-      # Stacker.logger.warn 'Stack already exists'
-      # return
+        # Stacker.logger.warn 'Stack already exists'
+        # return
       # end
 
       if parameters.missing.any?
@@ -101,10 +101,10 @@ module Stacker
       end
 
       Stacker.logger.info 'Creating stack'
-
-      hashParams = parameters.resolved.map { |key, value| {"parameter_key" => key, "parameter_value" => value} }
-
-
+		
+	  hashParams = parameters.resolved.map { |key, value| {"parameter_key" => key, "parameter_value" => value} }
+	  
+	  
       region.client.create_stack(
         stack_name: name,
         template_body: template.localStr,
@@ -119,7 +119,7 @@ module Stacker
     end
 
     def update options = {}
-      Stacker.logger.info 'update stack called'
+	Stacker.logger.info 'update stack called'
       options.assert_valid_keys(:blocking, :allow_destructive)
 
       blocking = options.fetch(:blocking, true)
@@ -132,21 +132,21 @@ module Stacker
       end
 
       Stacker.logger.info 'Updating stack'
-
-      hashParams = parameters.resolved.map { |key, value| {"parameter_key" => key, "parameter_value" => value} }
-
-      update_params = {
-        stack_name: name,
-        template_body: template.localStr,
-        parameters: hashParams,
-        capabilities: capabilities.local
-      }
+	  
+	  hashParams = parameters.resolved.map { |key, value| {"parameter_key" => key, "parameter_value" => value} }
+	  
+	   update_params = {
+	     stack_name: name,
+         template_body: template.localStr,
+         parameters: hashParams,
+         capabilities: capabilities.local
+       }
 
       unless allow_destructive
         update_params[:stack_policy_during_update_body] = SAFE_UPDATE_POLICY
       end
 
-      region.client.update_stack(update_params)
+	  region.client.update_stack(update_params)
 
       wait_while_status 'UPDATE_IN_PROGRESS' if blocking
     rescue Aws::CloudFormation::Errors::ValidationError => err
@@ -182,9 +182,9 @@ module Stacker
       end
     end
 
-    def wait_while_status wait_status
+    def wait_while_status wait_status 
       while flush_cache(:stack_status) && ((region.client.describe_stacks stack_name: name)[0])[0].stack_status == wait_status
-        report_status
+		report_status
         sleep 5
       end
       report_status
@@ -192,3 +192,4 @@ module Stacker
 
   end
 end
+
