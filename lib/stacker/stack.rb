@@ -25,7 +25,7 @@ module Stacker
       exists?
       last_updated_time   
 	  stack_status	
-      status_reason
+      stack_status_reason
     ]
 
     SAFE_UPDATE_POLICY = <<-JSON
@@ -164,13 +164,8 @@ JSON
 
     def report_status
       case stack_status
-      when /_COMPLETE$/
-        Stacker.logger.info "#{name} Status => #{stack_status}"
-      when /ROLLBACK_IN_PROGRESS$/, /_FAILED$/
-        failure_event = client.events.enum(limit: 30).find do |event|
-          event.resource_status =~ /_FAILED$/
-        end
-        failure_reason = failure_event.nil? ? "Unknown failure reason" : failure_event.resource_status_reason
+      when /_FAILED$/, /ROLLBACK/
+        failure_reason = stack_status_reason ? stack_status_reason : "Unknown failure reason"
         if failure_reason =~ /stack policy/
           raise StackPolicyError.new failure_reason
         else
