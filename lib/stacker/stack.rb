@@ -183,7 +183,7 @@ JSON
     end
 
     def wait_while_status wait_status 
-      while flush_cache(:stack_status) && ((region.client.describe_stacks stack_name: name)[0])[0].stack_status == wait_status
+      while flush_cache("stack_status") && client.stack_status == wait_status
 		report_status
         sleep 5
       end
