@@ -19,6 +19,9 @@ module Stacker
 
     extend Memoist
 
+    # 
+    # This constant contains all memoized methods of the client object
+    # 
     CLIENT_METHODS = %w[
       creation_time
       description
@@ -162,6 +165,12 @@ JSON
 
     private
 
+    # 
+    # This method accesses current objects' stack_status method and prints out the status of the stack.
+    # however, If the status is "FAILED" OR "ROLLBACK" then this method attempts to retrieve status reason. Using that reason this method
+    # throws an exception. 
+    # 
+    # @return [void] Prints out current status of the stack. 
     def report_status
       case stack_status
       when /_FAILED$/, /ROLLBACK/
@@ -177,6 +186,12 @@ JSON
       end
     end
 
+    # 
+    # Waits until status of the stack chages to "wait_status" 
+    # @param wait_status [string] expected status of the cloudformation
+    # 
+    # @return [void] As soon as the stack status changes to the expected status this method returns.
+    # 
     def wait_while_status wait_status 
       while flush_cache("stack_status") && client.stack_status == wait_status
 		report_status
