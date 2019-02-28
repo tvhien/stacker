@@ -29,7 +29,7 @@ module Stacker
       end
 	  
 	  def localStr
-        local
+        JSONFormatter.format(local)
       end
 
       def remote
