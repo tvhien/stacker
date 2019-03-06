@@ -16,6 +16,7 @@ module Stacker
     class StackPolicyError < Error; end
     class DoesNotExistError < Error; end
     class MissingParameters < Error; end
+    class MissingTags < Error; end
     class UpToDateError < Error; end
 
     extend Memoist
@@ -137,6 +138,12 @@ JSON
       if parameters.missing.any?
         raise MissingParameters.new(
           "Required parameters missing: #{parameters.missing.join ', '}"
+        )
+      end
+
+      if tags.missing.any?
+        raise MissingTags.new(
+          "Required tags missing: #{tags.missing.join ', '}"
         )
       end
 
