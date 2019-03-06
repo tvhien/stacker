@@ -143,7 +143,8 @@ JSON
       Stacker.logger.info 'Updating stack'
     
       Stacker.logger.info "tags missing #{tags.missing}"
-      Stacker.logger.info "parameters #{parameters}"  
+      Stacker.logger.info "parameters #{parameters}" 
+      Stacker.logger.info "parameters resolved #{parameters.resolved}"  
       Stacker.logger.info "tags #{tags}"
       Stacker.logger.info "tags resolved #{tags.resolved}"
 
