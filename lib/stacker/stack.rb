@@ -145,6 +145,8 @@ JSON
 	  hashParams = parameters.resolved.map { |key, value| {"parameter_key" => key, "parameter_value" => value} }
     hashTags = tags.resolved.map { |key, value| {"tag_key" => key, "tag_value" => value} }
     
+    Stacker.logger.info "hashTags #{hashTags}"
+
 	   update_params = {
 	     stack_name: name,
          template_body: template.localStr,
