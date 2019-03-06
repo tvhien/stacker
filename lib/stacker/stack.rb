@@ -5,6 +5,7 @@ require 'aws-sdk'
 require 'memoist'
 require 'stacker/stack/capabilities'
 require 'stacker/stack/parameters'
+require 'stacker/stack/tags'
 require 'stacker/stack/template'
 require 'logger'
 
@@ -76,6 +77,10 @@ JSON
       @parameters ||= Parameters.new self
     end
 
+    def tags
+      @tags ||= Tags.new self
+    end
+
     def capabilities
       @capabilities ||= Capabilities.new self
     end
@@ -106,12 +111,13 @@ JSON
       Stacker.logger.info 'Creating stack'
 		
 	  hashParams = parameters.resolved.map { |key, value| {"parameter_key" => key, "parameter_value" => value} }
-	  
+	  hashTags = tags.resolved.map { |key, value| {"tag_key" => key, "tag_value" => value} }
 	  
       region.client.create_stack(
         stack_name: name,
         template_body: template.localStr,
         parameters: hashParams,
+        tags: hashTags,
         capabilities: capabilities.local,
         disable_rollback: true
       )
@@ -137,11 +143,13 @@ JSON
       Stacker.logger.info 'Updating stack'
 	  
 	  hashParams = parameters.resolved.map { |key, value| {"parameter_key" => key, "parameter_value" => value} }
-	  
+    hashTags = tags.resolved.map { |key, value| {"tag_key" => key, "tag_value" => value} }
+    
 	   update_params = {
 	     stack_name: name,
          template_body: template.localStr,
          parameters: hashParams,
+         tags: hashTags,
          capabilities: capabilities.local
        }
 
