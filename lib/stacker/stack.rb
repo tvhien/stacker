@@ -141,7 +141,12 @@ JSON
       end
 
       Stacker.logger.info 'Updating stack'
-	  
+    
+      Stacker.logger.info "tags missing #{tags.missing}"
+      Stacker.logger.info "parameters #{parameters}"  
+      Stacker.logger.info "tags #{tags}"
+      Stacker.logger.info "tags resolved #{tags.resolved}"
+
 	  hashParams = parameters.resolved.map { |key, value| {"parameter_key" => key, "parameter_value" => value} }
     hashTags = tags.resolved.map { |key, value| {"tag_key" => key, "tag_value" => value} }
     
