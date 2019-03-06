@@ -4,6 +4,7 @@ module Stacker
     attr_reader :region, :parameters
 
     def initialize region, parameters
+      Stacker.logger.info "Resolver #{parameters}"
       @region, @parameters = region, parameters
     end
 
