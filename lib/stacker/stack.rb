@@ -141,6 +141,7 @@ JSON
         )
       end
 
+      Stacker.logger.info 'Checking missing tags'
       if tags.missing.any?
         raise MissingTags.new(
           "Required tags missing: #{tags.missing.join ', '}"
