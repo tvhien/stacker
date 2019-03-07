@@ -36,6 +36,8 @@ module Stacker
           )
         )
 
+        Stacker.logger.info "parameters available #{available}"
+
         available.slice(*template_definitions.keys)
       end
 
