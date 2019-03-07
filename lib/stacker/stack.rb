@@ -152,14 +152,14 @@ JSON
     
       Stacker.logger.info "Tags resolved #{tags.resolved}"
 	  hashParams = parameters.resolved.map { |key, value| {"parameter_key" => key, "parameter_value" => value} }
-    hashTags = tags.resolved.map { |key, value| {key => key, value => value} }
+    hashTags = tags.resolved.map { |key, value| {"key" => key, "value" => value} }
     
     Stacker.logger.info "hashTags #{hashTags}"
 
 	   update_params = {
 	     stack_name: name,
          template_body: template.localStr,
-         parameters: tags.resolved,
+         parameters: hashParams,
          tags: hashTags,
          capabilities: capabilities.local
        }
