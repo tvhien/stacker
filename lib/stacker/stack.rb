@@ -160,7 +160,7 @@ JSON
 	     stack_name: name,
          template_body: template.localStr,
          parameters: hashParams,
-         #tags: hashTags,
+         tags: [{key:"Team", value:"Integration"}],
          capabilities: capabilities.local
        }
 
