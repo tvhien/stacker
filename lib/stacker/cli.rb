@@ -44,6 +44,7 @@ module Stacker
           'Updated'      => stack.last_updated_time || stack.creation_time,
           'Capabilities' => stack.capabilities.remote,
           'Parameters'   => stack.parameters.remote,
+          'Tags'         => stack.tags.remote,
           'Outputs'      => stack.outputs
         )
       end
@@ -184,14 +185,16 @@ YAML
     def full_diff stack
       templ_diff = stack.template.diff :color
       param_diff = stack.parameters.diff :color
+      tags_diff = stack.tags.diff :color
 
-      if (templ_diff + param_diff).length == 0
+      if (templ_diff + param_diff + tags_diff).length == 0
         Stacker.logger.warn 'Stack up-to-date'
         return false
       end
 
       Stacker.logger.info "\n#{templ_diff.indent}\n" if templ_diff.length > 0
       Stacker.logger.info "\n#{param_diff.indent}\n" if param_diff.length > 0
+      Stacker.logger.info "\n#{tags_diff.indent}\n" if tags_diff.length > 0
 
       true
     end
@@ -220,9 +223,10 @@ YAML
 
     def resolve stack
       Stacker.logger.info "cli resolving"
-      return {} if stack.parameters.resolver.dependencies.none?
+      return {} if stack.parameters.resolver.dependencies.none? and stack.tags.resolver.dependencies.none?
       Stacker.logger.info 'Resolving dependencies...'
       stack.parameters.resolved
+      stack.tags.resolved
     end
 
     def with_one_or_all stack_name = nil, &block
