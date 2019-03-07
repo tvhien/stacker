@@ -21,8 +21,7 @@ module Stacker
       # template defaults merged with region and stack-specific overrides
       def local
         region_defaults = stack.region.defaults.fetch 'tags', {}
-
-        Stacker.logger.info "region_defaults #{region_defaults}"
+        
         template_defaults = Hash[
           template_definitions.select { |_, opts|
             opts.key?('Default')
@@ -38,6 +37,7 @@ module Stacker
         )
 
         Stacker.logger.info "tags available 1:#{available}"
+        Stacker.logger.info "tags keys:#{template_definitions.keys}"
 
         available.slice(*template_definitions.keys)
       end
