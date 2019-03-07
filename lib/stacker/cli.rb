@@ -222,7 +222,6 @@ YAML
     end
 
     def resolve stack
-      Stacker.logger.info "cli resolving"
       return {} if stack.parameters.resolver.dependencies.none? and stack.tags.resolver.dependencies.none?
       Stacker.logger.info 'Resolving dependencies...'
       stack.parameters.resolved

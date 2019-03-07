@@ -53,7 +53,6 @@ module Stacker
       memoize :resolved
 
       def resolver
-        Stacker.logger.info "parameters param local: #{local}"
         Resolver.new stack.region, local
       end
       memoize :resolver

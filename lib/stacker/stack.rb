@@ -16,7 +16,6 @@ module Stacker
     class StackPolicyError < Error; end
     class DoesNotExistError < Error; end
     class MissingParameters < Error; end
-    class MissingTags < Error; end
     class UpToDateError < Error; end
 
     extend Memoist
@@ -140,14 +139,7 @@ JSON
           "Required parameters missing: #{parameters.missing.join ', '}"
         )
       end
-
-      Stacker.logger.info 'Checking missing tags'
-      if tags.missing.any?
-        raise MissingTags.new(
-          "Required tags missing: #{tags.missing.join ', '}"
-        )
-      end
-
+      
       Stacker.logger.info 'Updating stack'
 
 	  hashParams = parameters.resolved.map { |key, value| {"parameter_key" => key, "parameter_value" => value} }
