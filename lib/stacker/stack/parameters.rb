@@ -39,8 +39,6 @@ module Stacker
         Stacker.logger.info "parameters available 1:#{available}"
 
         available.slice(*template_definitions.keys)
-
-        Stacker.logger.info "parameters available 2:#{available}"
       end
 
       def missing
