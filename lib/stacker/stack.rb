@@ -109,7 +109,6 @@ JSON
       end
 
       Stacker.logger.info 'Creating stack'
-
 	  hashParams = parameters.resolved.map { |key, value| {"parameter_key" => key, "parameter_value" => value} }
 	  arrayTags = tags.resolved.map { |tag_name, tag_value| {key: tag_name, value: tag_value} }
 	  
@@ -139,9 +138,8 @@ JSON
           "Required parameters missing: #{parameters.missing.join ', '}"
         )
       end
-      
-      Stacker.logger.info 'Updating stack'
 
+      Stacker.logger.info 'Updating stack'
 	  hashParams = parameters.resolved.map { |key, value| {"parameter_key" => key, "parameter_value" => value} }
     arrayTags = tags.resolved.map { |tag_name, tag_value| {key: tag_name, value: tag_value} }
 
