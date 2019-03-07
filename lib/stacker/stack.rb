@@ -110,7 +110,7 @@ JSON
       end
 
       Stacker.logger.info 'Creating stack'
-		Staker.logger.info "Tags resolved #{tags.resolved}"
+      
 	  hashParams = parameters.resolved.map { |key, value| {"parameter_key" => key, "parameter_value" => value} }
 	  hashTags = tags.resolved.map { |key, value| {"key" => key, "value" => value} }
 	  
@@ -150,8 +150,9 @@ JSON
 
       Stacker.logger.info 'Updating stack'
     
+      Stacker.logger.info "Tags resolved #{tags.resolved}"
 	  hashParams = parameters.resolved.map { |key, value| {"parameter_key" => key, "parameter_value" => value} }
-    hashTags = tags.resolved.map { |key, value| {"tag_key" => key, "tag_value" => value} }
+    hashTags = tags.resolved.map { |key, value| {"key" => key, "value" => value} }
     
     Stacker.logger.info "hashTags #{hashTags}"
 
@@ -159,7 +160,7 @@ JSON
 	     stack_name: name,
          template_body: template.localStr,
          parameters: hashParams,
-         tags: [{key:"Team", value:"Integr"}],
+         tags: hashTags,
          capabilities: capabilities.local
        }
 

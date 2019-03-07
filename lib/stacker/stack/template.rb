@@ -19,10 +19,8 @@ module Stacker
       def local
         @local ||= begin
           if exists?
-            Stacker.logger.info "path: #{path}"
             template = JSON.parse File.read path
             template['AWSTemplateFormatVersion'] ||= FORMAT_VERSION
-            Stacker.logger.info "template: #{template}"
             template
           else
             {}

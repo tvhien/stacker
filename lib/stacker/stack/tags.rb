@@ -52,7 +52,6 @@ module Stacker
       memoize :resolved
 
       def resolver
-        Stacker.logger.info "tags param local: #{local}"
         ResolverTag.new stack.region, local
       end
       memoize :resolver

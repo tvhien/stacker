@@ -35,10 +35,6 @@ module Stacker
             stack.options.fetch 'parameters', {}
           )
         )
-
-        Stacker.logger.info "parameters available 1:#{available}"
-        Stacker.logger.info "parameters keys:#{template_definitions.keys}"
-
         available.slice(*template_definitions.keys)
       end
 
