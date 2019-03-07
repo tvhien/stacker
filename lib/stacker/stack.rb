@@ -150,12 +150,6 @@ JSON
 
       Stacker.logger.info 'Updating stack'
     
-      Stacker.logger.info "tags missing #{tags.missing}"
-      Stacker.logger.info "parameters #{parameters}" 
-      Stacker.logger.info "parameters resolved #{parameters.resolved}"  
-      Stacker.logger.info "tags #{tags}"
-      Stacker.logger.info "tags resolved #{tags.resolved}"
-
 	  hashParams = parameters.resolved.map { |key, value| {"parameter_key" => key, "parameter_value" => value} }
     hashTags = tags.resolved.map { |key, value| {"tag_key" => key, "tag_value" => value} }
     
@@ -166,7 +160,7 @@ JSON
 	     stack_name: name,
          template_body: template.localStr,
          parameters: hashParams,
-         tags: hashTags,
+         #tags: hashTags,
          capabilities: capabilities.local
        }
 
