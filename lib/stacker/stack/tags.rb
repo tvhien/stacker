@@ -1,6 +1,6 @@
 require 'memoist'
 require 'stacker/differ'
-require 'stacker/resolverTag'
+require 'stacker/resolver'
 require 'stacker/stack/component'
 
 module Stacker
@@ -52,7 +52,7 @@ module Stacker
       memoize :resolved
 
       def resolver
-        ResolverTag.new stack.region, local
+        Resolver.new stack.region, local
       end
       memoize :resolver
 

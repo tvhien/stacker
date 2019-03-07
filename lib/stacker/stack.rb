@@ -112,13 +112,13 @@ JSON
       Stacker.logger.info 'Creating stack'
 
 	  hashParams = parameters.resolved.map { |key, value| {"parameter_key" => key, "parameter_value" => value} }
-	  hashTags = tags.resolved.map { |key, value| {"key" => key, "value" => value} }
+	  arrayTags = tags.resolved.map { |tag_name, tag_value| {key: tag_name, value: tag_value} }
 	  
       region.client.create_stack(
         stack_name: name,
         template_body: template.localStr,
         parameters: hashParams,
-        tags: hashTags,
+        tags: arrayTags,
         capabilities: capabilities.local,
         disable_rollback: true
       )
@@ -149,18 +149,15 @@ JSON
       end
 
       Stacker.logger.info 'Updating stack'
-    
-      Stacker.logger.info "Tags resolved #{tags.resolved}"
+
 	  hashParams = parameters.resolved.map { |key, value| {"parameter_key" => key, "parameter_value" => value} }
-    hashTags = tags.resolved.map { |tag_name, tag_value| {key: tag_name, value: tag_value} }
-    
-    Stacker.logger.info "hashTags #{hashTags}"
+    arrayTags = tags.resolved.map { |tag_name, tag_value| {key: tag_name, value: tag_value} }
 
 	   update_params = {
 	     stack_name: name,
          template_body: template.localStr,
          parameters: hashParams,
-         tags: hashTags,
+         tags: arrayTags,
          capabilities: capabilities.local
        }
 
