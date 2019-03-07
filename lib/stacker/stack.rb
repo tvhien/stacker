@@ -152,7 +152,7 @@ JSON
     
       Stacker.logger.info "Tags resolved #{tags.resolved}"
 	  hashParams = parameters.resolved.map { |key, value| {"parameter_key" => key, "parameter_value" => value} }
-    hashTags = tags.resolved.each { |key, value| item = {key: key, value: value} }
+    hashTags = tags.resolved.map { |tag_name, tag_value| {key: tag_name, value: tag_value} }
     
     Stacker.logger.info "hashTags #{hashTags}"
 
