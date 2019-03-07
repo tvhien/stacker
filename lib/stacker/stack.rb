@@ -110,9 +110,9 @@ JSON
       end
 
       Stacker.logger.info 'Creating stack'
-      
+
 	  hashParams = parameters.resolved.map { |key, value| {"parameter_key" => key, "parameter_value" => value} }
-	  hashTags = tags.resolved.map { |key, value| {"key" => key, "value" => value} }
+	  hashTags = tags.resolved.map { |key, value| {"key" : key, "value" : value} }
 	  
       region.client.create_stack(
         stack_name: name,
