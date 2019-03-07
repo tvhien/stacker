@@ -35,6 +35,7 @@ module Stacker
             stack.options.fetch 'parameters', {}
           )
         )
+        
         available.slice(*template_definitions.keys)
       end
 

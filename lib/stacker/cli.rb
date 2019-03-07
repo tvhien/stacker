@@ -223,7 +223,7 @@ YAML
 
     def resolve stack
       return {} if stack.parameters.resolver.dependencies.none? and stack.tags.resolver.dependencies.none?
-      Stacker.logger.info 'Resolving dependencies...'
+      Stacker.logger.debug 'Resolving dependencies...'
       stack.parameters.resolved
       stack.tags.resolved
     end
