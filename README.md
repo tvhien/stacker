@@ -51,6 +51,9 @@ defaults:
     VPCId:
       Stack: VPC
       Output: VPCId # depend on an output from another stack
+  tags:
+    Environment: 'Dev1'
+    Team: 'X-Team'
 
 stacks:
   - name: VPC
@@ -60,6 +63,8 @@ stacks:
       InternetGateway:
         Stack: VPC
         Output: InternetGateway
+    tags:
+      Component: 'Svc'
 
   - name: PrivateSubnets
 
