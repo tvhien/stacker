@@ -42,8 +42,7 @@ module Stacker
       end
 
       def remote
-        Stacker.logger.info "Hash #{Hash[(((stack.region.client.describe_stacks stack_name: client.stack_name)[0])[0]).tags.map { |tag| [ tag.tag_key, tag.tag_value ] }]}"
-		Hash[(((stack.region.client.describe_stacks stack_name: client.stack_name)[0])[0]).tags.map { |tag| [ tag.tag_key, tag.tag_value ] }]
+        Hash[(((stack.region.client.describe_stacks stack_name: client.stack_name)[0])[0]).tags.map { |tag| [ tag.key, tag.value ] }]
       end
       memoize :remote
 
