@@ -37,9 +37,11 @@ module Stacker
           )
         )
 
-        Stacker.logger.info "available #{available}"
+        Stacker.logger.info "tags available 1:#{available}"
 
         available.slice(*template_definitions.keys)
+
+        Stacker.logger.info "tags available 2:#{available}"
       end
 
       def missing
