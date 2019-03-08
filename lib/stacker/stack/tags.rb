@@ -5,22 +5,22 @@ require 'stacker/stack/component'
 
 module Stacker
   class Stack
-    class Parameters < Component
+    class Tags < Component
 
       extend Memoist
 
       # everything required by the template
       def template_definitions
-        stack.template.local.fetch 'Parameters', {}
+        stack.template.local.fetch 'Tags', {}
       end
 
       def region_defaults
-        stack.region.defaults.fetch 'parameters', {}
+        stack.region.defaults.fetch 'tags', {}
       end
 
       # template defaults merged with region and stack-specific overrides
       def local
-        region_defaults = stack.region.defaults.fetch 'parameters', {}
+        region_defaults = stack.region.defaults.fetch 'tags', {}
 
         template_defaults = Hash[
           template_definitions.select { |_, opts|
@@ -32,11 +32,9 @@ module Stacker
 
         available = template_defaults.merge(
           region_defaults.merge(
-            stack.options.fetch 'parameters', {}
+            stack.options.fetch 'tags', {}
           )
         )
-        
-        available.slice(*template_definitions.keys)
       end
 
       def missing
@@ -44,7 +42,7 @@ module Stacker
       end
 
       def remote
-		Hash[(((stack.region.client.describe_stacks stack_name: client.stack_name)[0])[0]).parameters.map { |parameter| [ parameter.parameter_key, parameter.parameter_value ] }]
+        Hash[(((stack.region.client.describe_stacks stack_name: client.stack_name)[0])[0]).tags.map { |tag| [ tag.key, tag.value ] }]
       end
       memoize :remote
 
