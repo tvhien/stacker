@@ -1,3 +1,3 @@
 source 'https://rubygems.org'
 gemspec
-gem 'memoist',  '0.16.0'
+gem 'memoist',  '~> 0.16'
