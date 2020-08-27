@@ -39,7 +39,7 @@ module Stacker
     @resolved ||= Hash[parameters.map do |name, value|
       if value.is_a? Hash
         if value.key?('Region')
-          value = resolveRegion value
+          value = send(resolveRegion value)
         else
           stack = region.GetStack value.fetch('Stack')
           value = stack.outputs.fetch value.fetch('Output')
