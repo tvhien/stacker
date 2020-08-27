@@ -25,6 +25,7 @@ module Stacker
             stack_name: value.fetch('Stack')
           })
           puts "Retrieved stacks: #{resp.stacks.length}"
+          puts "Outputs in stack: #{resp.stacks[0].outputs.length}"
           @outputs = Hash[resp.stacks[0].outputs.map { |output| [ output.output_key, output.output_value ] }]
           value = outputs.fetch value.fetch('Output')
           puts "retrieved value: #{value}"
