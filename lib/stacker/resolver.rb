@@ -15,7 +15,7 @@ module Stacker
       }
     end
 
-    def resolveRegion valuesHash
+    def resolveRegion(valuesHash)
       region, stack, output = valuesHash.fetch('Region'), valuesHash.fetch('Stack'), valuesHash.fetch('Output')
       puts "Grabbing output from region #{region} for stack: #{stack} and output #{output}"
       cfnClient = Aws::CloudFormation::Client.new(region: region)
@@ -39,7 +39,7 @@ module Stacker
     @resolved ||= Hash[parameters.map do |name, value|
       if value.is_a? Hash
         if value.key?('Region')
-          value = send(resolveRegion value)
+          value = resolveRegion(value)
         else
           stack = region.GetStack value.fetch('Stack')
           value = stack.outputs.fetch value.fetch('Output')
