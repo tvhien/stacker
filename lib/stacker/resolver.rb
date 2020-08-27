@@ -20,7 +20,7 @@ module Stacker
       puts "Grabbing output from region #{region} for stack: #{stack} and output #{output}"
       cfnClient = Aws::CloudFormation::Client.new(region: region)
       resp = cfnClient.describe_stacks({
-        stack_name: value.fetch('Stack')
+        stack_name: stack
       })
       if resp.stacks.length == 0
         raise "No stacks found called #{stack}"
