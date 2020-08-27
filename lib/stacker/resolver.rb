@@ -18,8 +18,19 @@ module Stacker
     def resolved
     @resolved ||= Hash[parameters.map do |name, value|
       if value.is_a? Hash
-        stack = region.GetStack value.fetch('Stack')
-        value = stack.outputs.fetch value.fetch('Output')
+        if value.key?("Region")
+          puts "Grabbing output from region #{value.fetch('Region')} for stack: #{value.fetch('Stack')}"
+          cfnClient = Aws::CloudFormation::Client.new(region: value.fetch('Region'))
+          resp = cfnClient.describe_stacks({
+            stack_name: value.fetch('Stack')
+          })
+          @outputs = Hash[resp.outputs.map { |output| [ output.output_key, output.output_value ] }]
+          value = outputs.fetch value.fetch('Output')
+          puts "retrieved value: #{value}"
+        else
+          stack = region.GetStack value.fetch('Stack')
+          value = stack.outputs.fetch value.fetch('Output')
+        end
       end
 		  retval = [ name, value ]
       #the following logging message will be reformatted in the future with more elaborate detail
