@@ -24,7 +24,8 @@ module Stacker
           resp = cfnClient.describe_stacks({
             stack_name: value.fetch('Stack')
           })
-          @outputs = Hash[resp.outputs.map { |output| [ output.output_key, output.output_value ] }]
+          puts "Retrieved stacks: #{resp.stacks.length}"
+          @outputs = Hash[resp.stacks[0].outputs.map { |output| [ output.output_key, output.output_value ] }]
           value = outputs.fetch value.fetch('Output')
           puts "retrieved value: #{value}"
         else
