@@ -26,7 +26,7 @@ module Stacker
           })
           puts "Retrieved stacks: #{resp.stacks.length}"
           puts "Outputs in stack: #{resp.stacks[0].outputs.length}"
-          for output in outputs do
+          for output in resp.stacks[0].outputs do
             puts "Looking at output_key #{output.output_key}"
             if output.output_key == value.fetch('Output')
               value = output.output_value
