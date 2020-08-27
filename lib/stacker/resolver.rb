@@ -16,7 +16,7 @@ module Stacker
     end
 
     def resolveRegion(valuesHash)
-      region, stack, output = valuesHash.fetch('Region'), valuesHash.fetch('Stack'), valuesHash.fetch('Output').fetch('output_key')
+      region, stack, output = valuesHash.fetch('Region'), valuesHash.fetch('Stack'), valuesHash.fetch('Output')
       puts "Grabbing output from region #{region} for stack: #{stack} and output #{output}"
       cfnClient = Aws::CloudFormation::Client.new(region: region)
       resp = cfnClient.describe_stacks({
@@ -27,9 +27,9 @@ module Stacker
       elsif resp.stacks.length > 1
         raise "More than 1 stacks found called #{stack}. Found #{resp.stacks.length}"
       end
-      for output in resp.stacks[0].outputs do
-        if output.output_key == output
-          return output.output_value
+      for cfnOutput in resp.stacks[0].outputs do
+        if cfnOutput.output_key == output
+          return cfnOutput.output_value
         end
       end
       raise "No output found for key #{output} in stack #{stack} in region #{region}"
