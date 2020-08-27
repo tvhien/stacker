@@ -16,7 +16,7 @@ module Stacker
     end
 
     def resolveRegion(valuesHash)
-      region, stack, output = valuesHash.fetch('Region'), valuesHash.fetch('Stack'), valuesHash.fetch('Output')
+      region, stack, output = valuesHash.fetch('Region'), valuesHash.fetch('Stack'), valuesHash.fetch('Output').fetch('output_key')
       puts "Grabbing output from region #{region} for stack: #{stack} and output #{output}"
       cfnClient = Aws::CloudFormation::Client.new(region: region)
       resp = cfnClient.describe_stacks({
