@@ -26,8 +26,13 @@ module Stacker
           })
           puts "Retrieved stacks: #{resp.stacks.length}"
           puts "Outputs in stack: #{resp.stacks[0].outputs.length}"
-          @outputs = Hash[resp.stacks[0].outputs.map { |output| [ output.output_key, output.output_value ] }]
-          value = outputs.fetch value.fetch('Output')
+          for output in outputs do
+            puts "Looking at output_key #{output.output_key}"
+            if output.output_key == value.fetch('Output')
+              value = output.output_value
+              break
+            end
+          end
           puts "retrieved value: #{value}"
         else
           stack = region.GetStack value.fetch('Stack')
