@@ -61,6 +61,7 @@ stacks:
   - name: PublicSubnets
     parameters:
       InternetGateway:
+        Region: us-west-1 # optional region definition to retrieve a stack in a different region to which stacker is deploying to
         Stack: VPC
         Output: InternetGateway
     tags:
