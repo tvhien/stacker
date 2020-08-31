@@ -15,7 +15,7 @@ module Stacker
       }
     end
 
-    def resolveRegionalCloudFormationStack(valuesHash)
+    def resolveRegionalCloudFormationStackOutput(valuesHash)
       region, stack, output = valuesHash.fetch('Region'), valuesHash.fetch('Stack'), valuesHash.fetch('Output')
 
       puts "Grabbing output from region #{region} for stack: #{stack} and output #{output}"
@@ -40,7 +40,7 @@ module Stacker
     @resolved ||= Hash[parameters.map do |name, value|
       if value.is_a? Hash
         if value.key?('Region')
-          value = resolveRegionalCloudFormationStack(value)
+          value = resolveRegionalCloudFormationStackOutput(value)
         else
           stack = region.GetStack value.fetch('Stack')
           value = stack.outputs.fetch value.fetch('Output')
