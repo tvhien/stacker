@@ -69,9 +69,9 @@ module Stacker
     def update stack_name = nil	
       (with_one_or_all(stack_name)).each do |stack|	    
         Stacker.logger.info "Attempting to update #{stack.name}"  
-    		resolve stack		
         #if stack.exists?
     		begin
+          resolve stack		
       		a = stack.region.client.describe_stacks stack_name: stack.name
       		rescue Aws::CloudFormation::Errors::ValidationError => err
       			if err.message =~ /does not exist/
